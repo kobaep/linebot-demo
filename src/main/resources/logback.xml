@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+  <property name="LOGS" value="./logs"/>
+
+  <property name="CONSOLE_LOG_PATTERN" value="%boldYellow(%d{yyyy-MM-dd HH:mm:ss.SSS}) %highlight([%-5level]) [%thread] %cyan(%logger) : %green(%msg%n)"/>
+
+  <property name="JSON_LOG_PATTERN" value="{DIPTimeStamp: %d{yyyy-MM-dd'T'HH:mm:ss.sss}, DIPStatus:%-5level, DIPSessionID: %X{sessionId}, Server:${HOST_NAME}, Timestamp: %d{yyyy-MM-dd'T'HH:mm:ss.sss}, Username: %X{username}, Role: %X{role}, PublicIP: null, InternalIP: %X{ip}, Device: %X{client}, Status:  &quot;%msg&quot;}%n"/>
+
+
+  <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOGS}/application.log</file>
+    <encoder>
+      <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+    </encoder>
+
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOGS}/app_%d{yyyy-MM-dd}.gz</fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy
+        class="ch.qos.logback.core.rolling.DefaultTimeBasedFileNamingAndTriggeringPolicy">
+      </timeBasedFileNamingAndTriggeringPolicy>
+    </rollingPolicy>
+
+  </appender>
+
+  <appender name="CostAllocation" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOGS}/cost_allocation.log</file>
+    <encoder>
+      <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+    </encoder>
+
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOGS}/app_ca_%d{yyyy-MM-dd}.gz</fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy
+              class="ch.qos.logback.core.rolling.DefaultTimeBasedFileNamingAndTriggeringPolicy">
+      </timeBasedFileNamingAndTriggeringPolicy>
+    </rollingPolicy>
+
+  </appender>
+
+  <appender name="JsonLogger" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOGS}/app_json.log</file>
+
+    <encoder>
+      <pattern>${JSON_LOG_PATTERN}</pattern>
+    </encoder>
+
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOGS}/app_json_%d{yyyy-MM-dd}.gz</fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy
+        class="ch.qos.logback.core.rolling.DefaultTimeBasedFileNamingAndTriggeringPolicy">
+      </timeBasedFileNamingAndTriggeringPolicy>
+    </rollingPolicy>
+  </appender>
+
+  <root level="INFO">
+    <appender-ref ref="RollingFile"/>
+    <appender-ref ref="Console"/>
+  </root>
+
+  <logger name="th.or.set.finance.services.ca" level="info">
+    <appender-ref ref="CostAllocation"/>
+  </logger>
+
+</configuration>
